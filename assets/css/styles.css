@@ -1,0 +1,124 @@
+:root {
+  --background-color: #161212;
+  --text-color: #FF0000;
+  --link-color: #66b3ff;
+  --border-color: #37D20F;
+}
+
+footer,
+header,
+main {
+  padding: 1rem 1.5rem;
+}
+
+nav {
+  margin-bottom: 5rem;
+}
+
+hr {
+  margin: 2rem 0;
+  border-color: var(--border-color);
+}
+h1,
+h2,
+sup {
+  text-transform: uppercase;
+}
+
+h2 {
+  font-weight: 500;
+}
+
+form {
+  width: 100%;
+}
+
+thead,
+tr,
+td,
+th {
+  display: inline-block;
+}
+
+nav > img {
+  height: 100px;
+}
+
+dialog > section > code {
+  width: calc(100% - 1.6rem);
+  color: var(--text-color);
+}
+
+dialog {
+  top: 5%;
+  max-height: 40vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+dialog > section > button[type='button'] {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+dialog > section > button[type='submit'] {
+  position: absolute;
+  top: 10px;
+  right: 0px;
+  background: none;
+  border: none;
+  font-size: 1em;
+}
+
+dialog > section > button > .copy-icon {
+  font-size: 0.875em;
+  margin-right: 0.25em;
+  position: relative;
+  top: -0.15em;
+  left: -0.125em;
+}
+
+dialog > section > button > span .copy-icon-inner {
+  font-size: 0.875em;
+  position: absolute;
+  top: 0.35em;
+  left: 0.25em;
+}
+
+button {
+  padding: 0.1rem 1rem;
+}
+
+sup > a {
+  text-decoration: underline;
+  color: var(--color-text-primary);
+}
+
+a {
+  color: var(--link-color);
+}
+
+body.blur {
+  filter: blur(5px);
+  transition: filter 0.3s;
+}
+details {
+  width: 100%;
+}
+input {
+  max-width: 100%;
+}
+
+section > input {
+  max-width: 90%;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+#darkModeToggle {
+  text-decoration: none;
+}
