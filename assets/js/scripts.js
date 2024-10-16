@@ -20,6 +20,8 @@ inputSubmit.addEventListener('click', async function () {
         const linkValue = inputLink.value;
         if (linkValue.includes("gateway.platoboost.com")) {
             await deltaBypass(linkValue);
+        } else if (linkValue.includes("flux.li")) {
+            await fluxusBypass(linkValue);
         } else {
             const response = await apiRequest(linkValue);
             if (response.status == 'success') {
@@ -190,4 +192,52 @@ function showError(message) {
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function fluxusBypass(link) {
+    const url = link;
+    const response = await fetch(`https://ethos.kys.gay/api/free/bypass?url=${encodeURIComponent(url)}`);
+    const data = await response.json();
+    const key = data.result;
+
+    const div = document.createElement('div');
+    div.className = 'gui';
+    div.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#000000;color:#fff;padding:20px;box-shadow:0 0 10px rgba(0,0,0,0.5);z-index:9999;animation:fadeIn 0.5s;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;';
+    div.innerHTML = `
+        <p><strong>${key}</strong></p>
+        <button id="copyKey" style="margin-top: 20px;padding: 10px 20px;background:#555;color:#fff;border:none;border-radius:5px;cursor:pointer;">Copy</button>
+    `;
+    document.body.appendChild(div);
+
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .gui {
+            font-size: 20px;
+            line-height: 1.5;
+        }
+        #copyKey:hover {
+            background: #000000;
+        }
+    `;
+    document.head.appendChild(style);
+
+    document.getElementById('copyKey').onclick = function() {
+        navigator.clipboard.writeText(key).then(() => {
+            closeFluxUI();
+        }).catch(err => {
+            console.error('Clipboard Error: ', err);
+        });
+    };
+}
+
+function closeFluxUI() {
+    const guiElement = document.querySelector('.gui');
+    if (guiElement) {
+        document.body.removeChild(guiElement);
+    }
+    window.close();
 }
