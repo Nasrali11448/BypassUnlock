@@ -1,14 +1,59 @@
 :root {
-  --background-color: #161212;
-  --text-color: #FF0000;
+  --background-color: #000000;
+  --text-color: #3FDB20;
   --link-color: #66b3ff;
   --border-color: #37D20F;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    animation: move 5s linear infinite;
+    opacity: 0.7;
+}
+
+.dot:nth-child(1) { left: 10%; top: 100%; animation-delay: 0s; }
+.dot:nth-child(2) { left: 30%; top: 100%; animation-delay: 0.5s; }
+.dot:nth-child(3) { left: 50%; top: 100%; animation-delay: 1s; }
+.dot:nth-child(4) { left: 70%; top: 100%; animation-delay: 1.5s; }
+.dot:nth-child(5) { left: 90%; top: 100%; animation-delay: 2s; }
+.dot:nth-child(6) { left: 20%; top: 100%; animation-delay: 2.5s; }
+.dot:nth-child(7) { left: 40%; top: 100%; animation-delay: 3s; }
+.dot:nth-child(8) { left: 60%; top: 100%; animation-delay: 3.5s; }
+.dot:nth-child(9) { left: 80%; top: 100%; animation-delay: 4s; }
+.dot:nth-child(10) { left: 25%; top: 100%; animation-delay: 4.5s; }
+
+@keyframes move {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-100vh); }
 }
 
 footer,
 header,
 main {
   padding: 1rem 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 nav {
@@ -19,6 +64,7 @@ hr {
   margin: 2rem 0;
   border-color: var(--border-color);
 }
+
 h1,
 h2,
 sup {
@@ -46,14 +92,14 @@ nav > img {
 
 dialog > section > code {
   width: calc(100% - 1.6rem);
-  color: var(--text-color);
+  color: #FF0000;
 }
 
 dialog {
   top: 5%;
   max-height: 40vh;
-  background-color: var(--background-color);
-  color: var(--text-color);
+  color: #FF0000;
+  background-color: #000000;
   border-color: var(--border-color);
 }
 
@@ -103,9 +149,11 @@ body.blur {
   filter: blur(5px);
   transition: filter 0.3s;
 }
+
 details {
   width: 100%;
 }
+
 input {
   max-width: 100%;
 }
@@ -117,8 +165,4 @@ section > input {
 body {
   background-color: var(--background-color);
   color: var(--text-color);
-}
-
-#darkModeToggle {
-  text-decoration: none;
 }
