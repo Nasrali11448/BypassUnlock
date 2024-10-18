@@ -1,6 +1,5 @@
 const linkRegex = /^(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?$/;
-const exampleLinks = ['Enter Link'];
-const randomLink = exampleLinks[Math.floor(Math.random() * exampleLinks.length)];
+
 
 const inputLink = document.querySelector('#inputLink');
 const inputSubmit = document.querySelector('#inputSubmit');
@@ -9,7 +8,7 @@ const bypassPaste = document.querySelector('#bypassPaste');
 const bypassPopup = document.querySelector('#bypassPopup');
 const bypassCopy = document.querySelector('#bypassCopy');
 
-inputLink.placeholder = `${randomLink}`;
+inputLink.placeholder = `Enter Link`;
 
 inputSubmit.addEventListener('click', async function () {
     inputSubmit.disabled = true;
@@ -46,7 +45,7 @@ inputSubmit.addEventListener('click', async function () {
     } catch (e) {
         showError('API Timeout');
     } finally {
-        toggleButtonByInput();
+        Toggle();
         inputLink.disabled = false;
     }
 });
@@ -61,8 +60,8 @@ bypassCopy.addEventListener('click', () => {
     }, 1000);
 });
 
-inputLink.addEventListener('input', toggleButtonByInput);
-toggleButtonByInput();
+inputLink.addEventListener('input', Toggle);
+Toggle();
 
 async function apiRequest(link) {
     try {
@@ -73,7 +72,7 @@ async function apiRequest(link) {
     }
 }
 
-function toggleButtonByInput() {
+function Toggle() {
     const matchesLink = linkRegex.test(inputLink.value);
     inputSubmit.disabled = !matchesLink;
     inputSubmit.textContent = 'Bypass ' + (matchesLink ? '' : '');
@@ -96,6 +95,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('dark-mode');
 });
 
+
+
+
+async function handleCaptchaVerification() {
+    return true;
+}
+
 async function deltaBypass(link) {
     const urlParams = new URLSearchParams(new URL(link).search);
     const id = urlParams.get("id");
@@ -104,7 +110,6 @@ async function deltaBypass(link) {
     const keyDataPromise = fetch(`https://api-gateway.platoboost.com/v1/authenticators/8/${id}`).then(res => res.json());
 
     if (tk) {
-        await sleep(3000);
         try {
             const response = await fetch(`https://api-gateway.platoboost.com/v1/sessions/auth/8/${id}/${tk}`, {
                 method: "PUT"
@@ -134,14 +139,13 @@ async function deltaBypass(link) {
     }
 
     try {
-        const captcha = keyData.captcha ? await getTurnstileResponse() : "";
+        const captcha = keyData.captcha ? await handleCaptchaVerification() : "";
+
         const sessionData = await fetch(`https://api-gateway.platoboost.com/v1/sessions/auth/8/${id}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ captcha, type: captcha ? "Turnstile" : "" })
         }).then(res => res.json());
-
-        await sleep(3000);
 
         const redirectUrl = decodeURIComponent(sessionData.redirect);
         const redirectParam = new URL(redirectUrl).searchParams.get("r");
@@ -151,47 +155,6 @@ async function deltaBypass(link) {
     } catch (err) {
         showError("Captcha Error");
     }
-}
-
-async function getTurnstileResponse() {
-    let response = "";
-    while (!response) {
-        try {
-            response = turnstile.getResponse();
-        } catch (e) {}
-        await sleep(5);
-    }
-    return response;
-}
-
-function showError(message) {
-    const errorDiv = document.createElement('div');
-    errorDiv.textContent = message;
-    errorDiv.style.position = 'fixed';
-    errorDiv.style.top = '20px';
-    errorDiv.style.right = '20px';
-    errorDiv.style.padding = '15px';
-    errorDiv.style.backgroundColor = 'red';
-    errorDiv.style.color = 'white';
-    errorDiv.style.borderRadius = '5px';
-    errorDiv.style.zIndex = '9999';
-    errorDiv.style.opacity = '0';
-    document.body.appendChild(errorDiv);
-
-    setTimeout(() => {
-        errorDiv.style.opacity = '1';
-    }, 10);
-
-    setTimeout(() => {
-        errorDiv.style.opacity = '0';
-        setTimeout(() => {
-            document.body.removeChild(errorDiv);
-        }, 500);
-    }, 3000);
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function fluxusBypass(link) {
