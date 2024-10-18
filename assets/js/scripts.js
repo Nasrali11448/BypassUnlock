@@ -238,4 +238,4 @@ function closeFluxUI() {
     if (guiElement) {
         document.body.removeChild(guiElement);
     }
-    }
+}
