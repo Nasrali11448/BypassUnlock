@@ -24,12 +24,12 @@ body, html {
 
 .dot {
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 13px;
+    height: 13px;
     border-radius: 50%;
-    background-color: red;
-    animation: move 5s linear infinite;
-    opacity: 0.7;
+    background-color: white;
+    animation: move 3s linear infinite;
+    opacity: 0.4;
 }
 
 .dot:nth-child(1) { left: 10%; top: 100%; animation-delay: 0s; }
