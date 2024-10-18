@@ -195,43 +195,42 @@ function sleep(ms) {
 }
 
 async function fluxusBypass(link) {
-    const url = link;
-    const response = await fetch(`https://ethos.kys.gay/api/free/bypass?url=${encodeURIComponent(url)}`);
-    const data = await response.json();
-    const key = data.result;
+    const fluxusApiUrl = `https://fluxus-bypass-orcin.vercel.app/api/fluxus?link=${encodeURIComponent(link)}`;
 
-    const div = document.createElement('div');
-    div.className = 'gui';
-    div.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#000000;color:#fff;padding:20px;box-shadow:0 0 10px rgba(0,0,0,0.5);z-index:9999;animation:fadeIn 0.5s;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;';
-    div.innerHTML = `
-        <p><strong>${key}</strong></p>
-        <button id="copyKey" style="margin-top: 20px;padding: 10px 20px;background:#555;color:#fff;border:none;border-radius:5px;cursor:pointer;">Copy</button>
-    `;
-    document.body.appendChild(div);
+    try {
+        const response = await fetch(fluxusApiUrl);
+        if (!response.ok) {
+            throw new Error('Fetch Error');
+        }
 
-    const style = document.createElement('style');
-    style.innerHTML = `
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .gui {
-            font-size: 20px;
-            line-height: 1.5;
-        }
-        #copyKey:hover {
-            background: #000000;
-        }
-    `;
-    document.head.appendChild(style);
+        const data = await response.json();
+        const key = data.key;
 
-    document.getElementById('copyKey').onclick = function() {
-        navigator.clipboard.writeText(key).then(() => {
-            closeFluxUI();
-        }).catch(err => {
-            console.error('Clipboard Error: ', err);
-        });
-    };
+        if (key) {
+            await navigator.clipboard.writeText(key);
+
+            const div = document.createElement('div');
+            div.className = 'gui';
+            div.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#000;color:#fff;padding:20px;z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;';
+            div.innerHTML = `
+                <p><strong>${key}</strong></p>
+                <button id="copyKey" style="margin-top: 20px;padding: 10px 20px;background:#555;color:#fff;border:none;border-radius:5px;cursor:pointer;">Copy</button>
+            `;
+            document.body.appendChild(div);
+
+            document.getElementById('copyKey').onclick = function() {
+                navigator.clipboard.writeText(key).then(() => {
+                    closeFluxUI();
+                }).catch(err => {
+                    console.error('Clipboard Error: ', err);
+                });
+            };
+        } else {
+            showError('Key Error');
+        }
+    } catch (error) {
+        showError('API Error');
+    }
 }
 
 function closeFluxUI() {
@@ -239,5 +238,4 @@ function closeFluxUI() {
     if (guiElement) {
         document.body.removeChild(guiElement);
     }
-    window.close();
-}
+    }
